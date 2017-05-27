@@ -5,7 +5,7 @@ and converts them to an ical file which can be read by e.g. Thunderbird.
 
 The output will be written to 'cal_olypark.ics' in the current directory.
 
-One may wants to adjust the 'url' variable below, currently it lists the
+One may wants to adjust the 'url' variable in 'olyparser.py', currently it lists the
 events of 2017.
 
 # Usage
