@@ -66,22 +66,33 @@ cal = ical.Calendar()
 
 # match time formats like 16:35 - 17:50
 timef = """([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]\s*\-\s*([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]"""
+# regular expressions
 reg = re.compile(timef)
+regbegin = re.compile("""^(Einlass:).*""")
 for it in olyevents:
     ev = ical.Event()
     # split dates like 01.01.2017 - 03.01.2017
     pdate = it.date.split(" - ")
     start = duparse(pdate[0], dayfirst=True)
 
-    # The timing format is not unique - just handle the case of HH:MM - HH:MM
+    # The timing format is not unique - just handle the case of HH:MM - HH:MM and Einlass: HH.MM
     # otherwise we will create an all day event
-    htmp = it.hour
-    htmp = re.search(reg,  htmp)
+    htmp = re.search(reg, it.hour)
+    htmpbegin = re.search(regbegin, it.hour)
     if htmp:
         # group(0) - just take the first occurrence
         htmp = htmp.group(0).split(" - ")
         s0 = duparse(htmp[0], dayfirst=True)
         start = start.replace(hour=s0.hour, minute=s0.minute)
+    # If we have: "Beginn: 20:00 Uhr" etc
+    elif htmpbegin:
+        timeexpr = re.compile("""([0-9]|0[0-9]|1[0-9]|2[0-3])[:,.][0-5][0-9]""")
+        htmpbegin = timeexpr.search(htmpbegin.group(0)).group(0)
+        # 19.00 -> 19:00 etc
+        htmpbegin = htmpbegin.replace('.',':')
+        s0 = duparse(htmpbegin, dayfirst=True)
+        start = start.replace(hour=s0.hour, minute=s0.minute)
+
     # default all day event
     else:
         startback = start
