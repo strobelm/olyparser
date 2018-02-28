@@ -9,7 +9,7 @@ and converts them to an ical file which can be read by e.g. Thunderbird.
 The output will be written to 'cal_olypark.ics' in the current directory.
 
 One may wants to adjust the 'url' variable below, currently it lists the
-events of 2017.
+events of 2018.
 """
 
 import os
@@ -27,9 +27,9 @@ __version__ = "0.1"
 __email__ = "strobel AT ma DOT tum DOT de"
 
 # Fetch Events from Olympiapark.de
-# This is 2017
+# This is 2018
 url = """
-http://www.olympiapark.de/de/no_cache/veranstaltungen-tickets/uebersicht/?tx_event_pi4%5Bstart%5D=1483225200&tx_event_pi4%5Bstop%5D=1514761200&tx_event_pi5%5Bm%5D=1483225200
+https://www.olympiapark.de/de/no_cache/veranstaltungen-tickets/uebersicht/
 """ # noqa 
 
 # Some locations are ignored because they don't attract much audience
@@ -65,8 +65,7 @@ for it in divs:
 cal = ical.Calendar()
 
 # match time formats like 16:35 - 17:50
-timef = """([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]\s*\
-        -\s*([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]"""
+timef = """([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]\s*\-\s*([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]"""
 reg = re.compile(timef)
 for it in olyevents:
     ev = ical.Event()
